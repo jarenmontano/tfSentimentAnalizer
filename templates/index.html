@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    <!-- <link rel="stylesheet" href="./style.css"> -->
+    <!-- Bellow is the bootstrap5 plug in -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="icon" href="{{url_for('static', filename='goal.png')}}" type="image/x-icon">
+    
+    
+    
+    
+  </head>
+  <body class="p-3 mb-2 bg-dark text-white">
+    <header>
+        <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                <img src="{{url_for('static', filename='goal.png')}}" alt="" width="30" height="24" class="d-inline-block align-text-top">
+                &nbsp; &nbsp; TopBinz
+              </a>
+            </div>
+          </nav>
+    </header>
+    
+    <main>
+        
+          {{soccer_teams | safe}}
+        
+        <div>
+            <button type="button" class="btn btn-secondary btn-lg" id="loadmoredeals">Load More Players?</button>
+        </div>
+
+    </main>
+    
+    <footer class="footer fixed-bottom bg-primary">
+      <div class="container text-center">
+          <span class="text-white">
+              Jaren Montano
+          </span>
+      </div>
+  </footer>
+  </body>
+</html>

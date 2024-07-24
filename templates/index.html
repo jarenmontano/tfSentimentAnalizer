@@ -30,16 +30,39 @@
         
           {{soccer_teams | safe}}
         
-        <div>
-            <button type="button" class="btn btn-secondary btn-lg" id="loadmoredeals">Load More Players?</button>
+        <div class="d-flex justify-content-center mt-4 mb-4">
+            <button type="button" class="btn btn-secondary btn-lg " id="loadmoredeals">Load More Players?</button>
         </div>
+        <div  class="d-flex  justify-content-center p-3">
+          <div class="w-75">  
+            {{previous_chat}}
+          </br></br>
+            {{prompt_response}}
+          </div>    
+        </div>
+
+        <div class="container text-center p-2">
+          <h1>Ask TopBinz Anything</h1> 
+        </div>
+
+        <div  class="d-flex  justify-content-center p-3">
+          <div class="w-75"> 
+            <form action="/aichat" method="post">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Give me information on the football Team St. Johnstone" aria-label="Recipient's username" aria-describedby="button-addon2" name="user_prompt" required>
+                <input type="submit" class="btn btn-outline-secondary" type="button" id="button-addon2"></input>
+              </div>
+            </form>
+          </div>     
+        </div>
+        
 
     </main>
     
-    <footer class="footer fixed-bottom bg-primary">
-      <div class="container text-center">
+    <footer class="footer fixed-bottom bg-secondary mt-2">
+      <div class="container text-center mt-2 mb-2">
           <span class="text-white">
-              Jaren Montano
+              TopBinz
           </span>
       </div>
   </footer>

@@ -1,4 +1,7 @@
-from flask import Flask, render_template, request
+import datetime
+import textwrap
+import IPython
+from flask import Flask, render_template, request, session
 import requests
 # https://requests.readthedocs.io/en/latest/
 import json
@@ -17,9 +20,11 @@ chat = model.start_chat(history=[])
 from IPython.display import display
 from IPython.display import Markdown
 
+app.secret_key = '192b9bdd22ab9ed4d12e236c87afcb9a393ec15f71bbf5dc987d54727823bcbf'
 
-# global variables
-htmlstring = ""
+
+
+
 
 #           Basic structure of the return json
 # {
@@ -48,6 +53,13 @@ htmlstring = ""
     #   </div>
     # </div>
 
+#this is a helper funtion from the gemini api docs // fixes the responses bad formating "SUPOSEDLY"
+def to_markdown(text):
+  text = text.replace('•', '  *')
+  return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
+
+
+
 
 # could get removed do not need it anymore
 def get_from_one(jsonstring):
@@ -59,6 +71,12 @@ def get_from_one(jsonstring):
     # print('imagepath  :' + imagepath + "  " + 'name  :' + name + '  shortcode  :' + shortcode)
     return imagepath, name, shortcode, founded
 
+def format_history(history):
+    history_formatted_string = '''<h1>Chat History<h1> <p class="fs-5">'''
+    for chat_item in history:
+        history_formatted_string += chat_item + "</br></br>"
+    history_formatted_string += "</p>"
+    return history_formatted_string
 
 def get_from_all(jsonstring):
     htmlstring = '''<div class="card-group">'''
@@ -106,11 +124,14 @@ def get_players_from_server():
         # name = "FAILURE"
         # return name
 
-def get_players():
-    if(len(htmlstring) < 40):
-       soccer_team=  get_players_from_server()
-       return soccer_team
-    return htmlstring
+
+# failure didn't work
+# def get_players():
+#     if(len(htmlstring) < 40):
+#        soccer_team=  get_players_from_server()
+#        return soccer_team
+#     return htmlstring
+
 
 
 
@@ -120,7 +141,8 @@ def use_ai(prompt):
     prompt_response = chat.send_message(prompt)
     # the one below is for one time, the one above is for chat(MULTIPLE with History)
     # prompt_response = model.generate_content(prompt)
-    print(prompt_response.text)
+    #print(prompt_response.text)
+    
 
     return prompt_response.text
 
@@ -128,19 +150,35 @@ def use_ai(prompt):
 @app.route("/")
 def index():
     prompt = "Give me information on the Soccer Teams St. Johnstone"
-    soccer_teams= get_players()
+    soccer_teams= get_players_from_server()
     #prompt_response = use_ai(prompt)
     # name = get_players()
     return render_template("index.html", soccer_teams=soccer_teams)
     # return render_template("index.html",  name=name)
 
-@app.route("/aichat" , methods=["POST"])
+@app.route("/" , methods=["POST"])
 def return_ai_response():
+    session["history"] = []
     user_prompt = request.form["user_prompt"]
+    session["history"].append(user_prompt)
     print(user_prompt)
-    soccer_teams= get_players()
-    prompt_response = " Top Binz Response\n" + use_ai(user_prompt)
-    return render_template("index.html", soccer_teams=soccer_teams, previous_chat = chat.history, prompt_response = prompt_response)
+    prompt_response =  use_ai(user_prompt)
+    session["history"].append(prompt_response)
+    #print(IPython.core.formatters.HTMLFormatter(to_markdown(prompt_response)))
+    print(prompt_response)
+    history = format_history(session["history"]) 
+    soccer_teams= get_players_from_server()
+    return render_template("index.html", soccer_teams=soccer_teams, history=history)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+@app.before_request
+def before_request():
+    session.permanent = True
+    app.permanent_session_lifetime = datetime.timedelta(minutes=1)
+    session.modified = True
+    

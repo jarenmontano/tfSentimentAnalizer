@@ -9,7 +9,7 @@
     <!-- Bellow is the bootstrap5 plug in -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="icon" href="{{url_for('static', filename='goal.png')}}" type="image/x-icon">
-    
+    <title>Sentiment Analyizer</title>
     
     
     
@@ -20,48 +20,45 @@
             <div class="container-fluid">
               <a class="navbar-brand" href="#">
                 <img src="{{url_for('static', filename='goal.png')}}" alt="" width="30" height="24" class="d-inline-block align-text-top">
-                &nbsp; &nbsp; TopBinz
+                &nbsp; &nbsp; Sentiment Analysis Using TensorFlow
               </a>
             </div>
           </nav>
     </header>
     
-    <main>
+    <main class="w-75 mx-auto">
+
+      <div class=" d-flex justify-content-center align-items-center p-3">
+        Current running Model has an accuracy of {{accuracy}}%, a loss of {{loss}}% and an R^2 score of {{r2}}.
+      </div>
         
-          {{soccer_teams | safe}}
-        
-        <div class="d-flex justify-content-center mt-4 mb-4">
-            <button type="button" class="btn btn-secondary btn-lg " id="loadmoredeals">Load More Players?</button>
-        </div>
-        <div  class="d-flex  justify-content-center p-3 ">
-          <div class="w-75">  
-            {{history | safe}}
-            
-          </div>    
-        </div>
 
         <div class="container text-center p-2">
-          <h2>Ask TopBinz Anything</h2> 
+          <h2>Enter a hotel review to see it's Sentiment score.</h2> 
         </div>
 
         <div  class="d-flex  justify-content-center p-3">
           <div class="w-75"> 
-            <form action="/" method="post">
+            <form action="/review" method="post">
               <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Give me information on the football Team St. Johnstone" aria-label="Recipient's username" aria-describedby="button-addon2" name="user_prompt" required>
+                <input type="text" class="form-control" placeholder="The staff was extremely friendly and the room service was Exquisit." aria-label="Recipient's username" aria-describedby="button-addon2" name="user_prompt" required>
                 <input type="submit" class="btn btn-outline-secondary" type="button" id="button-addon2"></input>
               </div>
             </form>
           </div>     
         </div>
+        <div class=" d-flex justify-content-center align-items-center p-3">
+          Prompt: {{user_prompt}}</br>
+          TensorFlow response: {{model_prediction}}</br>
+          Sklearn's response : {{sk_response}}
+        </div>
         
-
     </main>
     
     <footer class="footer fixed-bottom bg-secondary mt-2">
       <div class="container text-center mt-2 mb-2">
           <span class="text-white">
-              TopBinz
+              Sentiment Analyizer
           </span>
       </div>
   </footer>
